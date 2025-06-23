@@ -3,102 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marsha's Blog</title>
-  <link rel="stylesheet" href="./css/styles.css">
+  <title>Marsha’s Blog</title>
+   <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-  <h1>All Blogs</h1>
-  <div id="post-list"></div>
+  <h1>All Blog Posts</h1>
+  <div id="post-list">
+    
+  </div>
 
   <div id="post-detail">
-    <h2 id="detail-title">Select a post</h2>
-    <img id="detail-image" style="max-width:100%; display:none;" />
-    <p id="detail-content"></p>
-    <p><em>By <span id="detail-author"></span></em></p>
-    <button id="edit-btn" style="display:none;">Edit</button>
-    <form id="edit-form" style="display:none;">
-      <input id="edit-title" required />
-      <textarea id="edit-content" required></textarea>
-      <button type="submit">Save</button>
-    </form>
+    <h2>Select a post</h2>
+    
   </div>
 
   <form id="new-post-form">
     <h2>Add New Post</h2>
-    <input id="new-title" placeholder="Title" required />
-    <textarea id="new-content" placeholder="Content" required></textarea>
-    <input id="new-author" placeholder="Author" required />
-    <input id="new-image" placeholder="Image URL (optional)" />
+    <label>
+      Title:<br>
+      <input id="new-title" name="new-title" placeholder="Title" required>
+    </label><br><br>
+    <label>
+      Content:<br>
+      <textarea id="new-content" name="new-content" placeholder="Content" required></textarea>
+    </label><br><br>
+    <label>
+      Author:<br>
+      <input id="new-author" name="new-author" placeholder="Author" required>
+    </label><br><br>
     <button type="submit">Add Post</button>
   </form>
+  <img src="https://ibb.co/HDQ42jJR" alt="selfie">
+    
+  <img src="https://ibb.co/YBLLJXst" alt="My Local Photo">
 
-  <script>
-    const base = 'http://localhost:3000/posts';
-    let cache = [];
-
-    async function fetchPosts() {
-      cache = await (await fetch(base)).json();
-      renderList();
-      if (cache[0]) loadPost(cache[0].id);
-    }
-
-    function renderList() {
-      const list = document.getElementById('post-list');
-      list.innerHTML = '';
-      cache.forEach(p => {
-        const div = document.createElement('div');
-        div.textContent = p.title;
-        div.onclick = () => loadPost(p.id);
-        list.appendChild(div);
-      });
-    }
-
-    async function loadPost(id) {
-      const post = await (await fetch(`${base}/${id}`)).json();
-      document.getElementById('detail-title').textContent = post.title;
-      document.getElementById('detail-content').textContent = post.content;
-      document.getElementById('detail-author').textContent = post.author;
-      const img = document.getElementById('detail-image');
-      if (post.image) { img.src = post.image; img.style.display = ''; }
-      else img.style.display = 'none';
-      setupEdit(post);
-    }
-
-    function setupEdit(post) {
-      const btn = document.getElementById('edit-btn'),
-            form = document.getElementById('edit-form');
-      btn.style.display = '';
-      btn.onclick = () => {
-        form.style.display = '';
-        form['edit-title'].value = post.title;
-        form['edit-content'].value = post.content;
-      };
-      form.onsubmit = e => {
-        e.preventDefault();
-        post.title = form['edit-title'].value;
-        post.content = form['edit-content'].value;
-        renderList();
-        loadPost(post.id);
-        form.style.display = 'none';
-      };
-    }
-
-    document.getElementById('new-post-form').onsubmit = e => {
-      e.preventDefault();
-      const form = e.target;
-      const newPost = {
-        id: Date.now(),
-        title: form['new-title'].value,
-        content: form['new-content'].value,
-        author: form['new-author'].value,
-        image: form['new-image'].value
-      };
-      cache.push(newPost);
-      renderList();
-      form.reset();
-    };
-
-    window.addEventListener('DOMContentLoaded', fetchPosts);
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
+
